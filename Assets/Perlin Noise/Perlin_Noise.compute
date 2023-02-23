@@ -1,0 +1,70 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+RWStructuredBuffer<int> permutation;
+int permutationLength;
+int gridSize;
+float2 offset;
+
+float2 normalize(float2 position) 
+{
+    float hypotenuse = sqrt(position.x * position.x + position.y * position.y);
+    float normalizedX = position.x / hypotenuse;
+    float normalizedY = position.y / hypotenuse;
+
+    return float2(normalizedX, normalizedY);
+}
+
+float dotproduct(float2 pos1, float2 pos2) 
+{
+    float2 norm1 = pos1;
+    float2 norm2 = pos2;
+
+    return norm1.x * norm2.x + norm1.y * norm2.y;
+}
+
+float interpolate(float a0, float a1, float w) 
+{
+    return (a1 - a0) * (3.0 - w * 2.0) * w * w + a0;
+}
+
+float2 randomVector(float2 position) 
+{
+    float randomValue = (float)permutation[(int)((round(position.x) + round(position.y)) / permutationLength)];
+    float noiseX = (frac(sin(dot(position, float2(12.9898, 78.233)) + randomValue) * 43758.5453));
+    float noiseY = (frac(sin(dot(position, float2(12.9898, 78.233) * 2.0) + randomValue) * 43758.5453));
+    
+    return normalize(float2(noiseX - 0.5f, noiseY - 0.5f));
+}
+
+float perlin(float2 uv) 
+{
+    float2 position = float2((float)(uv.x / gridSize) + offset.x, (float)(uv.y / gridSize) + offset.x);
+    float2 floorPosition = float2((float)floor(position.x), (float)floor(position.y));
+
+    float weightX = position.x - floorPosition.x;
+
+    float dot1 = dotproduct(float2(position.x - floorPosition.x, position.y - floorPosition.y), randomVector(floorPosition - offset));
+    float dot2 = dotproduct(float2(position.x - (floorPosition.x + 1), position.y - floorPosition.y), randomVector(float2(floorPosition.x - offset.x + 1, floorPosition.y - offset.y)));
+    float interpol1 = interpolate(dot1, dot2, weightX);
+
+    dot1 = dotproduct(float2(position.x - floorPosition.x, position.y - (floorPosition.y + 1)), randomVector(float2(floorPosition.x - offset.x, floorPosition.y - offset.y + 1)));
+    dot2 = dotproduct(float2(position.x - (floorPosition.x + 1), position.y - (floorPosition.y + 1)), randomVector(float2(floorPosition.x - offset.x + 1, floorPosition.y - offset.y + 1)));
+    float interpol2 = interpolate(dot1, dot2, weightX);
+
+    return interpolate(interpol1, interpol2, position.y - floorPosition.y);
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+
+    float value = perlin(id.xy);
+    float perlinValue = (value + 1.0f) / 2.0f;
+    //Result[id.xy] = float4(perlin(id.xy), randomVector(position).x, randomVector(position).y, 0.0f);
+    Result[id.xy] = float4(perlinValue, perlinValue, perlinValue, 0.0f);
+}
