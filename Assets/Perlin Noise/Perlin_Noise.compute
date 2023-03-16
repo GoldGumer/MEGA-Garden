@@ -7,7 +7,6 @@ RWTexture2D<float4> Result;
 RWStructuredBuffer<int> permutation;
 int permutationLength;
 int gridSize;
-float2 offset;
 
 float2 normalize(float2 position) 
 {
@@ -42,17 +41,17 @@ float2 randomVector(float2 position)
 
 float perlin(float2 uv) 
 {
-    float2 position = float2((float)(uv.x / gridSize) + offset.x, (float)(uv.y / gridSize) + offset.x);
+    float2 position = float2((float)(uv.x / gridSize), (float)(uv.y / gridSize));
     float2 floorPosition = float2((float)floor(position.x), (float)floor(position.y));
 
     float weightX = position.x - floorPosition.x;
 
-    float dot1 = dotproduct(float2(position.x - floorPosition.x, position.y - floorPosition.y), randomVector(floorPosition - offset));
-    float dot2 = dotproduct(float2(position.x - (floorPosition.x + 1), position.y - floorPosition.y), randomVector(float2(floorPosition.x - offset.x + 1, floorPosition.y - offset.y)));
+    float dot1 = dotproduct(float2(position.x - floorPosition.x, position.y - floorPosition.y), randomVector(floorPosition));
+    float dot2 = dotproduct(float2(position.x - (floorPosition.x + 1), position.y - floorPosition.y), randomVector(float2(floorPosition.x + 1, floorPosition.y)));
     float interpol1 = interpolate(dot1, dot2, weightX);
 
-    dot1 = dotproduct(float2(position.x - floorPosition.x, position.y - (floorPosition.y + 1)), randomVector(float2(floorPosition.x - offset.x, floorPosition.y - offset.y + 1)));
-    dot2 = dotproduct(float2(position.x - (floorPosition.x + 1), position.y - (floorPosition.y + 1)), randomVector(float2(floorPosition.x - offset.x + 1, floorPosition.y - offset.y + 1)));
+    dot1 = dotproduct(float2(position.x - floorPosition.x, position.y - (floorPosition.y + 1)), randomVector(float2(floorPosition.x, floorPosition.y + 1)));
+    dot2 = dotproduct(float2(position.x - (floorPosition.x + 1), position.y - (floorPosition.y + 1)), randomVector(float2(floorPosition.x + 1, floorPosition.y + 1)));
     float interpol2 = interpolate(dot1, dot2, weightX);
 
     return interpolate(interpol1, interpol2, position.y - floorPosition.y);

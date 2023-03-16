@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Perlin_Noise_Manager : MonoBehaviour
 {
-    public float[] offset;
-
     //Algorithm used. runs on GPU for optimization
     [SerializeField] ComputeShader perlinNoise;
 
@@ -41,7 +39,6 @@ public class Perlin_Noise_Manager : MonoBehaviour
         randomize = false;
         gridSize = 5;
         textureSize = new Vector2Int(10, 10);
-        offset = new float[2] { 0, 0 };
     }
 
     public void Randomize()
@@ -67,7 +64,6 @@ public class Perlin_Noise_Manager : MonoBehaviour
         perlinNoise.SetTexture(0, "Result", renderTexture);
         perlinNoise.SetInt("gridSize", gridSize);
         perlinNoise.SetInt("permutationLength", permutation.Length);
-        perlinNoise.SetFloats("offset", offset);
 
         if (randomize)
         {
