@@ -4,11 +4,11 @@ using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Vect4
+public class MyVector4
 {
-    float x, y, z, w;
+    public float x, y, z, w;
 
-    public Vect4(Vector4 vector)
+    public MyVector4(Vector4 vector)
     {
         x = vector.x;
         y = vector.y;
@@ -16,7 +16,7 @@ public class Vect4
         w = vector.w;
     }
 
-    public Vect4(float x, float y, float z, float w)
+    public MyVector4(float x, float y, float z, float w)
     {
         this.x = x;
         this.y = y;
@@ -24,7 +24,7 @@ public class Vect4
         this.w = w;
     }
 
-    public Vect4(float[] floats)
+    public MyVector4(float[] floats)
     {
         x = 0;
         y = 0;
@@ -55,39 +55,41 @@ public class Vect4
         }
     }
 
-    public Vect4(Vect4 vect) : this(vect.x, vect.y, vect.z, vect.w) { }
+    public MyVector4(MyVector4 vect) : this(vect.x, vect.y, vect.z, vect.w) { }
 
-    public Vect4() : this(0, 0, 0, 0) { }
+    public MyVector4() : this(0, 0, 0, 0) { }
 
-    public static Vect4 operator +(Vect4 lhs, Vect4 rhs)
+    public static MyVector4 operator +(MyVector4 lhs, MyVector4 rhs)
     {
-        return new Vect4(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
+        return new MyVector4(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
     }
-    public static Vect4 operator -(Vect4 lhs, Vect4 rhs)
+
+    public static MyVector4 operator -(MyVector4 lhs, MyVector4 rhs)
     {
-        return new Vect4(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
+        return new MyVector4(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
     }
-    public static Vect4 operator *(Vect4 lhs, float rhs)
+
+    public static MyVector4 operator *(MyVector4 lhs, float rhs)
     {
-        return new Vect4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
+        return new MyVector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
     }
-    public static Vect4 operator /(Vect4 lhs, float rhs)
+
+    public static MyVector4 operator /(MyVector4 lhs, float rhs)
     {
-        return new Vect4(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs, lhs.w / rhs);
+        return new MyVector4(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs, lhs.w / rhs);
     }
 
     public float length()
     {
-        return Mathf.Pow(x * x + y * y + z * z + w * w, 2);
+        return Mathf.Pow(x * x + y * y + z * z + w * w, 0.5f);
     }
 
-    public Vect4 normalize()
+    public MyVector4 normalize()
     {
-        Vect4 v = new Vect4(x, y, z, w);
-        return v / v.length();
+        return new MyVector4(x, y, z, w) / length();
     }
-    
-    public static float dotProduct(Vect4 lhs, Vect4 rhs)
+
+    public static float dotProduct(MyVector4 lhs, MyVector4 rhs)
     {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
     }
