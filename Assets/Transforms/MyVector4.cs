@@ -4,6 +4,7 @@ using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[System.Serializable]
 public class MyVector4
 {
     public float x, y, z, w;
