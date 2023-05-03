@@ -61,9 +61,19 @@ public class MyVector3
         return new MyVector3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
     }
 
+    public static MyVector3 operator -(MyVector3 vector3)
+    {
+        return new MyVector3(-vector3.x, -vector3.y, -vector3.z);
+    }
+
     public static MyVector3 operator *(MyVector3 lhs, float rhs)
     {
         return new MyVector3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+    }
+
+    public static float operator *(MyVector3 lhs, MyVector3 rhs)
+    {
+        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
     }
 
     public static MyVector3 operator /(MyVector3 lhs, float rhs)
@@ -81,9 +91,9 @@ public class MyVector3
         return new MyVector3(x, y, z) / length();
     }
 
-    public static float dotProduct(MyVector3 lhs, MyVector3 rhs)
+    public static MyVector3 crossProduct(MyVector3 lhs, MyVector3 rhs)
     {
-        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+        return new MyVector3(lhs.y * rhs.z - lhs.z * rhs.y, lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x);
     }
 
     public Vector3 getUnityVector3()

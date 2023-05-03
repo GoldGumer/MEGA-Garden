@@ -70,9 +70,19 @@ public class MyVector4
         return new MyVector4(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
     }
 
+    public static MyVector4 operator -(MyVector4 vector4)
+    {
+        return new MyVector4(-vector4.x, -vector4.y, -vector4.z, -vector4.w);
+    }
+
     public static MyVector4 operator *(MyVector4 lhs, float rhs)
     {
         return new MyVector4(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
+    }
+
+    public static float operator *(MyVector4 lhs, MyVector4 rhs)
+    {
+        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
     }
 
     public static MyVector4 operator /(MyVector4 lhs, float rhs)
@@ -88,11 +98,6 @@ public class MyVector4
     public MyVector4 normalize()
     {
         return new MyVector4(x, y, z, w) / length();
-    }
-
-    public static float dotProduct(MyVector4 lhs, MyVector4 rhs)
-    {
-        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
     }
 
     public Vector4 getUnityVector4()

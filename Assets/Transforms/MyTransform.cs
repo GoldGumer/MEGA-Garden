@@ -35,11 +35,11 @@ public class MyTransform : MonoBehaviour
 
         transformedVertices = new MyVector3[meshVertices.Length];
 
-        MyMatrix4x4 
-            mScale, 
+        MyMatrix4x4
+            mScale,
             mRotation,
             mTranslation,
-            mTranformation;
+            mTransformation;
 
         //Scaling
 
@@ -85,12 +85,13 @@ public class MyTransform : MonoBehaviour
 
         //Apply
 
-        mTranformation = (mTranslation * (mRotation * mScale));
+        mTransformation = (mTranslation * (mRotation * mScale));
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         int i = 0;
         foreach (MyVector3 vertex in meshVertices)
         {
-            transformedVertices[i] = mTranformation * vertex;
+            transformedVertices[i] = mTransformation * vertex;
+
             i++;
         }
 

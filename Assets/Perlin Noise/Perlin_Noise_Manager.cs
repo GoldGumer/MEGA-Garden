@@ -15,7 +15,7 @@ public class Perlin_Noise_Manager : MonoBehaviour
     Vector2Int textureSize;
 
     //Generated Perlin Noise
-    public RenderTexture renderTexture = null;
+    [SerializeField] RenderTexture renderTexture = null;
 
     int[] permutation = { 151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36,
                       103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148, 247, 120, 234, 75, 0,
@@ -84,14 +84,11 @@ public class Perlin_Noise_Manager : MonoBehaviour
         perlinNoise.GetKernelThreadGroupSizes(0, out x, out y, out z);
         perlinNoise.Dispatch(0, (int)(renderTexture.width / x), (int)(renderTexture.height / y), (int)z);
 
-        
-
         permuationBuffer.Dispose();
     }
 
-    // Update is called once per frame
-    void Update()
+    public RenderTexture GetPerlinTexture()
     {
-        
+        return renderTexture;
     }
 }

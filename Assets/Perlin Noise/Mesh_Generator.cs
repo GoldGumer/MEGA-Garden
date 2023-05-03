@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class Mesh_Generator : MonoBehaviour
 {
+    [SerializeField] float pixelMultiplier;
+    [SerializeField] int gridSize;
+    [SerializeField] Vector2Int fieldSize;
+
+    [SerializeField] bool randomize = false;
+
+    Perlin_Noise_Manager noiseManager;
+
     Texture2D noiseTexture;
 
     //2D mesh for the play area
@@ -17,6 +25,15 @@ public class Mesh_Generator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        noiseTexture = new Texture2D(fieldSize.x, fieldSize.y, TextureFormat.RGB24, false);
+
+        noiseManager = GetComponent<Perlin_Noise_Manager>();
+        noiseManager.SetParameters(gridSize, fieldSize);
+        noiseManager.GeneratePerlinNoise();
+        RenderTexture.active = noiseManager.GetPerlinTexture();
+
+        noiseTexture.ReadPixels(new Rect(new Vector2(0, 0), fieldSize), 0, 0);
+
         field = new Mesh();
         GetComponent<MeshFilter>().mesh = field;
         GenerateFaces();
@@ -25,14 +42,14 @@ public class Mesh_Generator : MonoBehaviour
 
     void GenerateFaces()
     {
-        int x = (int)noiseTexture.Size().x - 2;
-        int y = (int)noiseTexture.Size().y - 2;
+        int x = fieldSize.x - 2;
+        int y = fieldSize.y - 2;
         vertices = new Vector3[(x + 1) * (y + 1)];
         for (int i = 0; i < (y + 1); i++)
         {
             for (int j = 0; j < (x + 1); j++)
             {
-                vertices[j + i * (x + 1)] = new Vector3(i - Mathf.Floor(x / 2), noiseTexture.GetPixel(j,i).r * 100, j - Mathf.Floor(y / 2));
+                vertices[j + i * (x + 1)] = new Vector3(i - Mathf.Floor(x / 2), noiseTexture.GetPixel(j,i).r * pixelMultiplier, j - Mathf.Floor(y / 2));
             }
         }
 
@@ -63,5 +80,26 @@ public class Mesh_Generator : MonoBehaviour
         field.triangles = trianglesList;
         field.RecalculateNormals();
         field.RecalculateTangents();
+    }
+
+    void Randomize()
+    {
+        noiseManager.Randomize();
+        noiseManager.SetParameters(gridSize, fieldSize);
+        noiseManager.GeneratePerlinNoise();
+        RenderTexture.active = noiseManager.GetPerlinTexture();
+        noiseTexture.ReadPixels(new Rect(new Vector2(0, 0), fieldSize), 0, 0);
+        GenerateFaces();
+        UpdateMesh();
+    }
+
+    private void Update()
+    {
+        if (randomize)
+        {
+            Randomize();
+            randomize = false;
+        }
+        UpdateMesh();
     }
 }
