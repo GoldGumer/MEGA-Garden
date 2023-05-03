@@ -54,21 +54,21 @@ public class MyTransform : MonoBehaviour
 
         MyMatrix4x4
             roll = new MyMatrix4x4(
-            new MyVector4(Mathf.Cos(eularRotation.x), -Mathf.Sin(eularRotation.x), 0, 0),
-            new MyVector4(Mathf.Sin(eularRotation.x), Mathf.Cos(eularRotation.x), 0, 0),
+            new MyVector4(Mathf.Cos(eularRotation.z), -Mathf.Sin(eularRotation.z), 0, 0),
+            new MyVector4(Mathf.Sin(eularRotation.z), Mathf.Cos(eularRotation.z), 0, 0),
             new MyVector4(0, 0, 1, 0),
             new MyVector4(0, 0, 0, 1)
             ),
             pitch = new MyMatrix4x4(
             new MyVector4(1, 0, 0, 0),
-            new MyVector4(0, Mathf.Cos(eularRotation.y), -Mathf.Sin(eularRotation.y), 0),
-            new MyVector4(0, Mathf.Sin(eularRotation.y), Mathf.Cos(eularRotation.y), 0),
+            new MyVector4(0, Mathf.Cos(eularRotation.x), -Mathf.Sin(eularRotation.x), 0),
+            new MyVector4(0, Mathf.Sin(eularRotation.x), Mathf.Cos(eularRotation.x), 0),
             new MyVector4(0, 0, 0, 1)
             ),
             yaw = new MyMatrix4x4(
-            new MyVector4(Mathf.Cos(eularRotation.z), 0, Mathf.Sin(eularRotation.z), 0),
+            new MyVector4(Mathf.Cos(eularRotation.y), 0, Mathf.Sin(eularRotation.y), 0),
             new MyVector4(0, 1, 0, 0),
-            new MyVector4(-Mathf.Sin(eularRotation.z), 0, Mathf.Cos(eularRotation.z), 0),
+            new MyVector4(-Mathf.Sin(eularRotation.y), 0, Mathf.Cos(eularRotation.y), 0),
             new MyVector4(0, 0, 0, 1)
             );
 
@@ -116,4 +116,30 @@ public class MyTransform : MonoBehaviour
     }
 
     //Public Functions
+
+    public void SetScale(MyVector3 newScale)
+    {
+        scale = newScale;
+    }
+    public void SetRotation(MyVector3 newRotation)
+    {
+        rotation = newRotation;
+    }
+    public void SetPosition(MyVector3 newPosition)
+    {
+        position = newPosition;
+    }
+
+    public MyVector3 GetScale()
+    {
+        return scale;
+    }
+    public MyVector3 GetRotation()
+    {
+        return rotation;
+    }
+    public MyVector3 GetPosition()
+    {
+        return position;
+    }
 }

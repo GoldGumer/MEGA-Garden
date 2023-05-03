@@ -32,6 +32,10 @@ float interpolate(float a0, float a1, float w)
 
 float2 randomVector(float2 position) 
 {
+    /*
+    Taken and adabted from (Adam, 2012)
+    */
+
     float randomValue = (float)permutation[(int)((round(position.x) + round(position.y)) / permutationLength)];
     float noiseX = (frac(sin(dot(position, float2(12.9898, 78.233)) + randomValue) * 43758.5453));
     float noiseY = (frac(sin(dot(position, float2(12.9898, 78.233) * 2.0) + randomValue) * 43758.5453));
@@ -60,10 +64,15 @@ float perlin(float2 uv)
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    // TODO: insert actual code here!
-
     float value = perlin(id.xy);
     float perlinValue = (value + 1.0f) / 2.0f;
     //Result[id.xy] = float4(perlin(id.xy), randomVector(position).x, randomVector(position).y, 0.0f);
     Result[id.xy] = float4(perlinValue, perlinValue, perlinValue, 0.0f);
 }
+
+/*
+Bibliography:
+Adam. (2012). Random number hlsl. https://gamedev.stackexchange.com/questions/32681/random-number-hlsl
+
+
+*/
