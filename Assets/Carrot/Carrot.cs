@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubePlant : MonoBehaviour
+public class Carrot : MonoBehaviour
 {
     [SerializeField] MyVector3 fullyGrownScale;
     [SerializeField] float scaleTime;
@@ -37,21 +37,23 @@ public class CubePlant : MonoBehaviour
     private void Update()
     {
         float smooth = SmoothStep(currentTime, 0.0f, 1.0f);
-        GetComponent<MyTransform>().SetScale(
-            new MyVector3(
+        MyVector3 scale = new MyVector3(
             baseGrownScale.x + (smooth * (fullyGrownScale.x - baseGrownScale.x)),
             baseGrownScale.y + (smooth * (fullyGrownScale.y - baseGrownScale.y)),
             baseGrownScale.z + (smooth * (fullyGrownScale.z - baseGrownScale.z))
-        ));
+        );
+        GetComponent<MyTransform>().SetScale(scale);
+        GetComponent<BoxCollider>().size = scale.GetUnityVector3();
+        GetComponent<BoxCollider>().center = GetComponent<MyTransform>().GetPosition().GetUnityVector3();
 
         currentTime += 1 / scaleTime * Time.deltaTime;
 
-        if (GetComponent<MyTransform>().GetScale().x >= (fullyGrownScale.x - 0.75f) && !isGrown) isGrown = true;
+        if (GetComponent<MyTransform>().GetScale().x >= (fullyGrownScale.x - (fullyGrownScale.x * 0.075f)) && !isGrown) isGrown = true;
     }
 
     //Public
 
-    bool GetIsGrown()
+    public bool GetIsGrown()
     {
         return isGrown;
     }

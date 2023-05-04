@@ -8,7 +8,7 @@ public class MyTransform : MonoBehaviour
     MyVector3[] transformedVertices;
 
     [SerializeField] MyVector3 scale;
-    [SerializeField] MyVector3 rotation;
+    [SerializeField] List<MyVector4> rotations;
     [SerializeField] MyVector3 position;
 
     MyVector3 eularRotation;
@@ -27,19 +27,11 @@ public class MyTransform : MonoBehaviour
 
     void UpdateMesh()
     {
-        eularRotation = new MyVector3(
-            rotation.x / (180 / Mathf.PI),
-            rotation.y / (180 / Mathf.PI),
-            rotation.z / (180 / Mathf.PI)
-            );
-
         transformedVertices = new MyVector3[meshVertices.Length];
 
         MyMatrix4x4
             mScale,
-            mRotation,
-            mTranslation,
-            mTransformation;
+            mTranslation;
 
         //Scaling
 
@@ -50,7 +42,7 @@ public class MyTransform : MonoBehaviour
             new MyVector4(0, 0, 0, 1)
             );
 
-        //Rotation
+        /*//Rotation
 
         MyMatrix4x4
             roll = new MyMatrix4x4(
@@ -72,7 +64,16 @@ public class MyTransform : MonoBehaviour
             new MyVector4(0, 0, 0, 1)
             );
 
-        mRotation = yaw * (pitch * roll);
+        mRotation = yaw * (pitch * roll);*/
+
+        MyQuaternion qRotations = new MyQuaternion();
+
+        foreach (MyVector4 vector4 in rotations)
+        {
+            if (vector4.x == new MyVector4().x && vector4.y == new MyVector4().y && vector4.z == new MyVector4().z) 
+                qRotations *= new MyQuaternion(vector4.w / (180 / Mathf.PI), new MyVector3(0, 1, 0).Normalize());
+            else qRotations *= new MyQuaternion(vector4.w / (180 / Mathf.PI), new MyVector3(vector4.x, vector4.y, vector4.z).Normalize());
+        }
 
         //Translation
 
@@ -85,12 +86,16 @@ public class MyTransform : MonoBehaviour
 
         //Apply
 
-        mTransformation = (mTranslation * (mRotation * mScale));
+        //mTransformation = (mTranslation * (mRotation * mScale));
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         int i = 0;
         foreach (MyVector3 vertex in meshVertices)
         {
-            transformedVertices[i] = mTransformation * vertex;
+            //transformedVertices[i] = mTransformation * vertex;
+
+            transformedVertices[i] = mScale * vertex;
+            transformedVertices[i] = (qRotations * new MyQuaternion(transformedVertices[i]) * qRotations.Inverse()).axis;
+            transformedVertices[i] = mTranslation * transformedVertices[i];
 
             i++;
         }
@@ -101,7 +106,7 @@ public class MyTransform : MonoBehaviour
         i = 0;
         foreach (MyVector3 vertex in transformedVertices)
         {
-            unityVertices[i] = vertex.getUnityVector3();
+            unityVertices[i] = vertex.GetUnityVector3();
             i++;
         }
 
@@ -117,14 +122,20 @@ public class MyTransform : MonoBehaviour
 
     //Public Functions
 
+    public void FaceTowards(MyVector3 pos)
+    {
+        MyVector3 a = new MyVector3(0, 0, 1);
+        MyVector3 b = pos - position;
+        float angle = MyVector3.AngleBetween(a, b);
+        MyVector3 normal = MyVector3.CrossProduct(a, b);
+        rotations.Add(new MyVector4(normal.x, normal.y, normal.z, angle));
+    }
+
     public void SetScale(MyVector3 newScale)
     {
         scale = newScale;
     }
-    public void SetRotation(MyVector3 newRotation)
-    {
-        rotation = newRotation;
-    }
+
     public void SetPosition(MyVector3 newPosition)
     {
         position = newPosition;
@@ -134,10 +145,7 @@ public class MyTransform : MonoBehaviour
     {
         return scale;
     }
-    public MyVector3 GetRotation()
-    {
-        return rotation;
-    }
+
     public MyVector3 GetPosition()
     {
         return position;

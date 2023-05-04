@@ -70,10 +70,14 @@ public class MyVector4
         return new MyVector4(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
     }
 
+    //inverse
+
     public static MyVector4 operator -(MyVector4 vector4)
     {
         return new MyVector4(-vector4.x, -vector4.y, -vector4.z, -vector4.w);
     }
+
+    //float vector4 multiplication
 
     public static MyVector4 operator *(MyVector4 lhs, float rhs)
     {
@@ -90,17 +94,31 @@ public class MyVector4
         return new MyVector4(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs, lhs.w / rhs);
     }
 
-    public float length()
+    //Booleans
+
+    public static bool operator ==(MyVector4 lhs, MyVector4 rhs)
+    {
+        if (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w) return true;
+        else return false;
+    }
+
+    public static bool operator !=(MyVector4 lhs, MyVector4 rhs)
+    {
+        if (lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z || lhs.w != rhs.w) return true;
+        else return false;
+    }
+
+    public float Length()
     {
         return Mathf.Pow(x * x + y * y + z * z + w * w, 0.5f);
     }
 
-    public MyVector4 normalize()
+    public MyVector4 Normalize()
     {
-        return new MyVector4(x, y, z, w) / length();
+        return new MyVector4(x, y, z, w) / Length();
     }
 
-    public Vector4 getUnityVector4()
+    public Vector4 GetUnityVector4()
     {
         return new Vector4(x, y, z, w);
     }

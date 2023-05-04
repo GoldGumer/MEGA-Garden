@@ -80,6 +80,7 @@ public class Mesh_Generator : MonoBehaviour
         field.triangles = trianglesList;
         field.RecalculateNormals();
         field.RecalculateTangents();
+        GetComponent<MeshCollider>().sharedMesh = field;
     }
 
     void Randomize()

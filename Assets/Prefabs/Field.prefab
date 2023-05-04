@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 996434316901084290}
   - component: {fileID: 996434316901084293}
   - component: {fileID: 996434316901084292}
+  - component: {fileID: 8436652536567336681}
   m_Layer: 0
   m_Name: Field
   m_TagString: Field
@@ -115,3 +116,17 @@ MonoBehaviour:
   gridSize: 16
   fieldSize: {x: 64, y: 64}
   randomize: 0
+--- !u!64 &8436652536567336681
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996434316901084295}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
