@@ -9,7 +9,7 @@ public class Mesh_Generator : MonoBehaviour
     [SerializeField] int gridSize;
     [SerializeField] Vector2Int fieldSize;
 
-    [SerializeField] bool randomize = false;
+    public bool randomise = false;
 
     Perlin_Noise_Manager noiseManager;
 
@@ -83,7 +83,7 @@ public class Mesh_Generator : MonoBehaviour
         GetComponent<MeshCollider>().sharedMesh = field;
     }
 
-    void Randomize()
+    public void Randomise()
     {
         noiseManager.Randomize();
         noiseManager.SetParameters(gridSize, fieldSize);
@@ -96,11 +96,10 @@ public class Mesh_Generator : MonoBehaviour
 
     private void Update()
     {
-        if (randomize)
+        if (randomise)
         {
-            Randomize();
-            randomize = false;
+            Randomise();
+            randomise = false;
         }
-        UpdateMesh();
     }
 }

@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayLength: 100
   carrot: {fileID: 3273922212864656707, guid: ec9b7b679ddfd7340a7dbaeb079b6baf, type: 3}
-  cooldownTime: 0.5
+  cooldownTime: 0.25

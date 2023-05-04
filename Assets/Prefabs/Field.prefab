@@ -112,9 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38a7395d5095b9147bbc58e956a5e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelMultiplier: 8
-  gridSize: 16
-  fieldSize: {x: 64, y: 64}
+  pixelMultiplier: 24
+  gridSize: 32
+  fieldSize: {x: 128, y: 128}
   randomize: 0
 --- !u!64 &8436652536567336681
 MeshCollider:
